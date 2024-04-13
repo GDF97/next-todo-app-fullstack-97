@@ -8,14 +8,16 @@
 - Prisma
 - MySQL
 - ShadCN
+- Axios
 
 ### RoadMap
 
 - [x] Conectar com Banco de Dados
 - [x] Configurar Projeto
 - [ ] Desenvolver a Interface
-- [ ] CRUD das tarefas
-  - [ ] Create
-  - [ ] Read
-  - [ ] Update
-  - [ ] Delete
+- [x] API das tarefas
+  - [x] GET
+  - [x] POST
+  - [x] DELETE
+  - [x] PUT
+  - [x] PATCH
