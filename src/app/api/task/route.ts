@@ -21,9 +21,15 @@ export async function POST(req: Request) {
         isCompleted: false,
       },
     });
-    return Response.json({ message: "Tarefa adicionada com Sucesso!", task });
+    return Response.json(
+      { message: "Tarefa adicionada com Sucesso!", task },
+      { status: 200 }
+    );
   } catch (error) {
-    return NextResponse.json({ message: "Error", error });
+    return NextResponse.json(
+      { message: "Error", error, stats: 200 },
+      { status: 500 }
+    );
   }
 }
 

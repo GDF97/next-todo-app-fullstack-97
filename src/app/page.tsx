@@ -2,11 +2,11 @@
 
 import TaskItem from "@/components/TaskItem";
 import { Button } from "@/components/ui/button";
+
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import useTaskAPI from "@/hooks/useTaskAPI";
 import { TaskType } from "@/types/TaskType";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 export default function Home() {
@@ -17,12 +17,18 @@ export default function Home() {
 
   async function addTask(taskName: string) {
     if (!taskName) return;
-    console.log(taskName);
 
-    const { message } = await api.addTask(taskName);
-    console.log(message);
-    getTasks();
-    setTaskName("");
+    try {
+      const { message, stats } = await api.addTask(taskName);
+
+      if (stats == 200) {
+        console.log(message);
+      }
+      getTasks();
+      setTaskName("");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function getTasks(): Promise<void> {
@@ -37,6 +43,7 @@ export default function Home() {
   }
 
   async function updateTask(id_task: number, newTaskName: string) {
+    if (!newTaskName) return;
     try {
       const { message } = await api.updateTask(id_task, newTaskName);
       console.log(message);
@@ -69,12 +76,6 @@ export default function Home() {
     }
   }
 
-  function handleModalUpdate(id_task: number) {
-    let newTaskName = prompt("Insira o nome da nova task!");
-    if (!newTaskName) return;
-    updateTask(id_task, newTaskName);
-  }
-
   useEffect(() => {
     getTasks();
   }, []);
@@ -90,11 +91,16 @@ export default function Home() {
             value={taskName}
             onChange={(e) => setTaskName(e.currentTarget.value)}
           />
-          <Button variant={"outline"} onClick={() => addTask(taskName)}>
+          <Button
+            variant={"outline"}
+            onClick={() => {
+              addTask(taskName);
+            }}
+          >
             Adicionar
           </Button>
         </div>
-        <ScrollArea className="h-96">
+        <ScrollArea className="h-[500px] pr-4">
           {taskArray != null &&
             taskArray.map((task) => (
               <TaskItem
@@ -102,7 +108,7 @@ export default function Home() {
                 {...task}
                 fnCompleteTodo={completeTodo}
                 fnDeleteTask={deleteTask}
-                fnUpdate={handleModalUpdate}
+                fnUpdate={updateTask}
               />
             ))}
         </ScrollArea>

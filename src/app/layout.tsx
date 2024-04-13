@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const jetbrains = JetBrains_Mono({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
         className={cn("min-h-screen bg-zinc-900 w-full", jetbrains.className)}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );
