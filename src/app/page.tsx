@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import useTaskAPI from "@/hooks/useTaskAPI";
 import { TaskType } from "@/types/TaskType";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 export default function Home() {
@@ -15,10 +16,13 @@ export default function Home() {
   const [taskArray, setTaskArray] = useState<TaskType[]>([]);
 
   async function addTask(taskName: string) {
-    console.log(taskArray);
     if (!taskName) return;
+    console.log(taskName);
 
-    alert(taskName);
+    const { message } = await api.addTask(taskName);
+    console.log(message);
+    getTasks();
+    setTaskName("");
   }
 
   async function getTasks(): Promise<void> {
@@ -32,14 +36,37 @@ export default function Home() {
     }
   }
 
-  async function updateTask(id_task: number, newTaskName: string) {}
+  async function updateTask(id_task: number, newTaskName: string) {
+    try {
+      const { message } = await api.updateTask(id_task, newTaskName);
+      console.log(message);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      getTasks();
+    }
+  }
 
   async function deleteTask(id_task: number) {
-    alert(`deletando task #${id_task}`);
+    try {
+      const { message } = await api.deleteTask(id_task);
+      console.log(message);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      getTasks();
+    }
   }
 
   async function completeTodo(id_task: number, isCompleted: boolean) {
-    alert(`status da task #${id_task}, ${!isCompleted}`);
+    try {
+      const { message } = await api.completeTodo(id_task, !isCompleted);
+      console.log(message);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      getTasks();
+    }
   }
 
   function handleModalUpdate(id_task: number) {

@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {
   try {
@@ -21,19 +21,21 @@ export async function POST(req: Request) {
         isCompleted: false,
       },
     });
-    return Response.json({ message: "ok!", task });
+    return Response.json({ message: "Tarefa adicionada com Sucesso!", task });
   } catch (error) {
     return NextResponse.json({ message: "Error", error });
   }
 }
 
-export async function DELETE(req: Request) {
-  const { id_task } = await req.json();
+export async function DELETE(req: NextRequest) {
+  const id = req.nextUrl.searchParams.get("id_task");
+  const id_task = Number(id);
+
   try {
     const task = await prisma.tb_task.delete({
       where: { id_task },
     });
-    return Response.json({ message: "OK!", task });
+    return Response.json({ message: "Tarefa deletada!", task });
   } catch (error) {
     return NextResponse.json({ message: "Error", error });
   }
@@ -50,7 +52,7 @@ export async function PUT(req: Request) {
         nm_task,
       },
     });
-    return Response.json({ message: "OK!", task });
+    return Response.json({ message: "Tarefa atualizada com Sucesso!", task });
   } catch (error) {
     return NextResponse.json({ message: "Error", error });
   }
@@ -67,7 +69,10 @@ export async function PATCH(req: Request) {
         isCompleted,
       },
     });
-    return Response.json({ message: "OK!", task });
+    return Response.json({
+      message: `Tarefa ${isCompleted ? "foi Completada" : "não Completada"}!`,
+      task,
+    });
   } catch (error) {
     return NextResponse.json({ message: "Error", error });
   }
