@@ -12,7 +12,7 @@ export default function Home() {
   const api = useTaskAPI();
 
   const [taskName, setTaskName] = useState("");
-  const [taskArray, setTaskArray] = useState<Array<TaskType> | null>(null);
+  const [taskArray, setTaskArray] = useState<TaskType[]>([]);
 
   async function addTask(taskName: string) {
     console.log(taskArray);
@@ -68,7 +68,16 @@ export default function Home() {
           </Button>
         </div>
         <ScrollArea className="h-96">
-          {taskArray && taskArray.map((task) => <p>{task.nm_task}</p>)}
+          {taskArray != null &&
+            taskArray.map((task) => (
+              <TaskItem
+                key={task.id_task}
+                {...task}
+                fnCompleteTodo={completeTodo}
+                fnDeleteTask={deleteTask}
+                fnUpdate={handleModalUpdate}
+              />
+            ))}
         </ScrollArea>
       </div>
     </div>
